@@ -1,0 +1,74 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-wrapper">
+  <div class="auth-shape s1"></div>
+  <div class="auth-shape s2"></div>
+  <div class="auth-shape s3"></div>
+
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <div class="auth-badge">
+        <i class="fa-solid fa-shield-heart"></i>
+        <span>Secure Access Portal</span>
+      </div>
+
+      <h1>Welcome back to StayScape</h1>
+      <p>
+        Sign in to manage bookings, save stays to your wishlist, and access your personal travel dashboard.
+      </p>
+
+      <div class="auth-visual-grid">
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-calendar-check"></i>
+          <h5>Smart Booking</h5>
+          <p>Track reservations, dates, and trip details in one place.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-heart"></i>
+          <h5>Saved Stays</h5>
+          <p>Quickly access your shortlisted properties anytime.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-chart-line"></i>
+          <h5>Host Dashboard</h5>
+          <p>Monitor listings, bookings, and performance metrics.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <h5>Interactive Travel</h5>
+          <p>Explore premium stays with maps and detailed property info.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <h2>Login</h2>
+        <p class="auth-subtext">Access your account and continue your journey.</p>
+
+        <form action="/login" method="POST">
+          <div class="auth-form-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" placeholder="Enter your username" required>
+          </div>
+
+          <div class="auth-form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" placeholder="Enter your password" required>
+          </div>
+
+          <button class="auth-btn" type="submit">
+            <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Don’t have an account? <a href="/signup">Create one</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

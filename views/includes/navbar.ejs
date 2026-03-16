@@ -1,0 +1,107 @@
+<nav class="navbar navbar-expand-lg ultra-navbar sticky-top">
+  <div class="container-fluid px-lg-4">
+
+    <!-- Brand -->
+    <a class="navbar-brand ultra-brand" href="/listings">
+      <span class="brand-icon-wrap">
+        <i class="fa-regular fa-compass"></i>
+      </span>
+      <span class="brand-text">StayScape</span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button
+      class="navbar-toggler border-0 shadow-none ultra-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fa-solid fa-bars-staggered"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- Search -->
+      <div class="navbar-nav mx-auto my-3 my-lg-0">
+        <form class="ultra-search-form d-flex" role="search" method="GET" action="/listings">
+          <div class="search-icon-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+
+          <input
+            class="form-control ultra-search-input"
+            type="search"
+            name="search"
+            placeholder="Search destinations"
+            aria-label="Search"
+          >
+
+          <button class="btn ultra-search-btn" type="submit">
+            <span>Search</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Menu -->
+      <div class="navbar-nav ms-auto ultra-nav-actions align-items-lg-center">
+
+        <a class="nav-link ultra-nav-link" href="/listings">
+          <i class="fa-solid fa-earth-asia me-1"></i>
+          <span>Explore</span>
+        </a>
+
+        <% if(typeof currUser !== "undefined" && currUser){ %>
+
+          <a class="nav-link ultra-nav-link" href="/listings/new">
+            <i class="fa-solid fa-plus me-1"></i>
+            <span>Add Listing</span>
+          </a>
+
+          <a class="nav-link ultra-nav-link" href="/bookings/my">
+            <i class="fa-solid fa-calendar-days me-1"></i>
+            <span>My Bookings</span>
+          </a>
+
+          <a class="nav-link ultra-nav-link" href="/listings/host/dashboard">
+            <i class="fa-solid fa-chart-line me-1"></i>
+            <span>Host Dashboard</span>
+          </a>
+          <a class="nav-link ultra-nav-link" href="/profile">
+  <i class="fa-solid fa-user me-1"></i>
+  <span>Profile</span>
+</a>
+
+          <a class="nav-link ultra-nav-link" href="/listings/wishlist">
+            <i class="fa-regular fa-heart me-1"></i>
+            <span>Wishlist</span>
+          </a>
+          <button class="dark-toggle-btn" onclick="toggleDarkMode()">
+<i class="fa-solid fa-moon"></i>
+</button>
+
+          <a class="nav-link ultra-nav-link logout-3d" href="/logout">
+            <i class="fa-solid fa-right-from-bracket me-1"></i>
+            <span>Log Out</span>
+          </a>
+
+        <% } else { %>
+
+          <a class="nav-link ultra-nav-link" href="/signup">
+            <i class="fa-solid fa-user-plus me-1"></i>
+            <span>Sign Up</span>
+          </a>
+
+          <a class="nav-link ultra-login-pill" href="/login">
+            <i class="fa-solid fa-user me-1"></i>
+            <span>Log In</span>
+          </a>
+
+        <% } %>
+
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,138 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="dashboard-page">
+  <div class="dashboard-hero">
+    <div>
+      <h1>Host Dashboard</h1>
+      <p>Manage your stays, bookings and revenue like a pro.</p>
+    </div>
+    <form action="/bookings/report/monthly" method="GET" class="d-flex gap-2 flex-wrap">
+  <select name="month" class="form-select" style="max-width: 160px;">
+    <option value="1">January</option>
+    <option value="2">February</option>
+    <option value="3">March</option>
+    <option value="4">April</option>
+    <option value="5">May</option>
+    <option value="6">June</option>
+    <option value="7">July</option>
+    <option value="8">August</option>
+    <option value="9">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+  </select>
+
+  <input type="number" name="year" class="form-control" value="2026" style="max-width: 120px;">
+
+  <button class="btn btn-dark">
+    <i class="fa-solid fa-file-arrow-down me-2"></i>Generate Report
+  </button>
+</form>
+    <a href="/listings/new" class="btn dashboard-hero-btn">
+      <i class="fa-solid fa-plus me-2"></i>Add New Listing
+    </a>
+  </div>
+
+  <div class="dashboard-stats">
+    <div class="dash-stat-card animated-stat">
+      <span class="dash-stat-number counter" data-target="<%= totalListings %>">0</span>
+      <span class="dash-stat-label">Listings</span>
+    </div>
+
+    <div class="dash-stat-card animated-stat">
+      <span class="dash-stat-number counter" data-target="<%= totalBookings %>">0</span>
+      <span class="dash-stat-label">Bookings</span>
+    </div>
+
+    <div class="dash-stat-card animated-stat revenue-card">
+      <span class="dash-stat-number revenue-counter" data-target="<%= totalRevenue %>">₹ 0</span>
+      <span class="dash-stat-label">Revenue</span>
+    </div>
+  </div>
+
+  <% if(listings.length === 0){ %>
+    <div class="empty-dashboard-card">
+      <i class="fa-solid fa-house-circle-xmark empty-dash-icon"></i>
+      <h3>No listings yet</h3>
+      <p>Start hosting by adding your first property.</p>
+      <a href="/listings/new" class="btn btn-dark">Create Listing</a>
+    </div>
+  <% } else { %>
+
+    <div class="row g-4 mt-2">
+      <% for(let listing of listings){ %>
+        <div class="col-lg-6">
+          <div class="dashboard-card">
+            <div class="dashboard-card-img-wrap">
+              <img src="<%= listing.image.url %>" alt="Listing image" class="dashboard-card-img">
+            </div>
+
+            <div class="dashboard-card-content">
+              <h4><%= listing.title %></h4>
+              <p class="dash-muted"><%= listing.location %>, <%= listing.country %></p>
+
+              <div class="dashboard-mini-stats">
+                <div>
+                  <span>Price</span>
+                  <strong>₹ <%= listing.price.toLocaleString("en-IN") %></strong>
+                </div>
+                <div>
+                  <span>Bookings</span>
+                  <strong><%= listing.bookings.length %></strong>
+                </div>
+                <div>
+                  <span>Category</span>
+                  <strong><%= listing.category %></strong>
+                </div>
+              </div>
+
+              <div class="dashboard-actions">
+                <a href="/listings/<%= listing._id %>" class="btn btn-dark btn-sm">View</a>
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm dashboard-edit-btn">Edit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+  <% } %>
+</div>
+
+<script>
+  const counters = document.querySelectorAll(".counter");
+  counters.forEach(counter => {
+    const target = +counter.getAttribute("data-target");
+    let count = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+
+    const update = () => {
+      count += step;
+      if (count >= target) {
+        counter.innerText = target.toLocaleString("en-IN");
+      } else {
+        counter.innerText = count.toLocaleString("en-IN");
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+  });
+
+  const revenueCounter = document.querySelector(".revenue-counter");
+  if (revenueCounter) {
+    const target = +revenueCounter.getAttribute("data-target");
+    let count = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+
+    const updateRevenue = () => {
+      count += step;
+      if (count >= target) {
+        revenueCounter.innerText = "₹ " + target.toLocaleString("en-IN");
+      } else {
+        revenueCounter.innerText = "₹ " + count.toLocaleString("en-IN");
+        requestAnimationFrame(updateRevenue);
+      }
+    };
+    updateRevenue();
+  }
+</script>

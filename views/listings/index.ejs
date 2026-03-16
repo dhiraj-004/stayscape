@@ -1,0 +1,181 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+
+  <!-- HERO SECTION -->
+  <div class="hero-section">
+    <h1>Find Your Perfect Stay</h1>
+    <p>Discover affordable rooms, luxury villas, and beautiful stays.</p>
+    <a href="/listings/new" class="btn hero-btn">Add Your Property</a>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-wrapper">
+    <div class="filters-container">
+
+      <div id="filters">
+
+        <div class="filter active" data-filter="All">
+          <i class="fa-solid fa-globe"></i>
+          <p>All</p>
+        </div>
+
+        <div class="filter" data-filter="Trending">
+          <i class="fa-solid fa-fire"></i>
+          <p>Trending</p>
+        </div>
+
+        <div class="filter" data-filter="Rooms">
+          <i class="fa-solid fa-bed"></i>
+          <p>Rooms</p>
+        </div>
+
+        <div class="filter" data-filter="Cities">
+          <i class="fa-solid fa-city"></i>
+          <p>Cities</p>
+        </div>
+
+        <div class="filter" data-filter="Mountains">
+          <i class="fa-solid fa-mountain"></i>
+          <p>Mountains</p>
+        </div>
+
+        <div class="filter" data-filter="Beach">
+          <i class="fa-solid fa-water"></i>
+          <p>Beach</p>
+        </div>
+
+        <div class="filter" data-filter="Camping">
+          <i class="fa-solid fa-campground"></i>
+          <p>Camping</p>
+        </div>
+
+        <div class="filter" data-filter="Farms">
+          <i class="fa-solid fa-cow"></i>
+          <p>Farms</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAX TOGGLE -->
+    <div class="tax-toggle">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">
+          Total after taxes
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTINGS GRID -->
+  <div class="row g-4 mt-2 listing-wrapper">
+
+    <% for(let listing of allListings){ %>
+
+      <% 
+        let isWishlisted = false;
+        if (currUser && currUser.wishlist) {
+          isWishlisted = currUser.wishlist.some(
+            (item) => item.toString() === listing._id.toString()
+          );
+        }
+      %>
+
+      <div class="col-12 col-md-6 col-lg-4 listing-link" data-category="<%= listing.category %>">
+
+        <div class="card listing-card h-100">
+
+          <div class="listing-img-wrapper">
+
+            <a href="/listings/<%= listing._id %>" class="listing-link-anchor">
+              <img 
+                src="<%= listing.image.url %>" 
+                class="card-img-top listing-img"
+                alt="Listing image"
+              >
+              <div class="listing-overlay"></div>
+            </a>
+
+            <div class="listing-badge rating-badge">
+              <i class="fa-solid fa-star"></i> New
+            </div>
+
+            <% if(currUser){ %>
+              <form method="POST" action="/listings/<%= listing._id %>/wishlist" class="wishlist-form">
+                <input type="hidden" name="redirectUrl" value="/listings">
+                <button 
+                  type="submit"
+                  class="wishlist-float <%= isWishlisted ? 'wishlisted' : '' %>"
+                >
+                  <i class="<%= isWishlisted ? 'fa-solid' : 'fa-regular' %> fa-heart"></i>
+                </button>
+              </form>
+            <% } else { %>
+              <a href="/login" class="wishlist-float">
+                <i class="fa-regular fa-heart"></i>
+              </a>
+            <% } %>
+
+          </div>
+
+          <div class="card-body">
+            <a href="/listings/<%= listing._id %>" class="listing-link-anchor">
+              <h5 class="listing-title"><%= listing.title %></h5>
+              <p class="listing-location"><%= listing.location %>, <%= listing.country %></p>
+              <p class="listing-price">₹ <%= listing.price.toLocaleString("en-IN") %> / night</p>
+              <span class="tax-info">+18% GST</span>
+
+              <!-- TEMP DEBUG: category dekhne ke liye, baad me hata dena -->
+              <!-- <p style="color:red;"><%= listing.category %></p> -->
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    <% } %>
+
+  </div>
+
+</div>
+
+<script>
+  // TAX TOGGLE
+  const taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+  if (taxSwitch) {
+    taxSwitch.addEventListener("click", () => {
+      const taxInfo = document.getElementsByClassName("tax-info");
+
+      for (let info of taxInfo) {
+        info.style.display = info.style.display !== "inline" ? "inline" : "none";
+      }
+    });
+  }
+
+  // FILTERS
+  const filters = document.querySelectorAll(".filter");
+  const listings = document.querySelectorAll(".listing-link");
+
+  filters.forEach((filter) => {
+    filter.addEventListener("click", () => {
+      const selectedCategory = filter.getAttribute("data-filter").trim().toLowerCase();
+
+      filters.forEach((f) => f.classList.remove("active"));
+      filter.classList.add("active");
+
+      listings.forEach((listing) => {
+        const listingCategory = listing.getAttribute("data-category").trim().toLowerCase();
+
+        if (selectedCategory === "all" || listingCategory === selectedCategory) {
+          listing.style.display = "block";
+        } else {
+          listing.style.display = "none";
+        }
+      });
+    });
+  });
+</script>

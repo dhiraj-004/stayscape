@@ -1,0 +1,119 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="profile-page">
+  <div class="profile-hero">
+    <div class="profile-hero-overlay"></div>
+
+    <div class="profile-main-card">
+      <div class="profile-left">
+        <div class="profile-avatar-wrap">
+          <img src="<%= user.profileImage %>" alt="Profile" class="profile-avatar">
+        </div>
+
+        <div class="profile-user-info">
+          <span class="profile-badge">
+            <i class="fa-solid fa-shield-halved me-2"></i>Verified Member
+          </span>
+
+          <h1><%= user.username %></h1>
+          <p class="profile-email"><i class="fa-solid fa-envelope me-2"></i><%= user.email %></p>
+          <p class="profile-bio"><%= user.bio %></p>
+          <p class="profile-joined">
+            <i class="fa-regular fa-calendar me-2"></i>
+            Joined on <%= user.createdAt ? new Date(user.createdAt).toDateString() : "Recently Joined" %>
+          </p>
+        </div>
+      </div>
+
+      <div class="profile-right">
+        <a href="/listings" class="profile-action-btn">
+          <i class="fa-solid fa-compass me-2"></i>Explore Stays
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-stats-grid">
+    <div class="profile-stat-card">
+      <div class="profile-stat-icon"><i class="fa-regular fa-heart"></i></div>
+      <div>
+        <h3><%= totalWishlist %></h3>
+        <p>Wishlist Items</p>
+      </div>
+    </div>
+
+    <div class="profile-stat-card">
+      <div class="profile-stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div>
+        <h3><%= totalBookings %></h3>
+        <p>Total Bookings</p>
+      </div>
+    </div>
+
+    <div class="profile-stat-card">
+      <div class="profile-stat-icon"><i class="fa-solid fa-house"></i></div>
+      <div>
+        <h3><%= totalListings %></h3>
+        <p>Hosted Listings</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-sections-grid">
+    <div class="profile-panel">
+      <div class="profile-panel-header">
+        <h2>Account Snapshot</h2>
+      </div>
+
+      <div class="profile-info-list">
+        <div class="profile-info-item">
+          <span>Username</span>
+          <strong><%= user.username %></strong>
+        </div>
+
+        <div class="profile-info-item">
+          <span>Email</span>
+          <strong><%= user.email %></strong>
+        </div>
+
+        <div class="profile-info-item">
+          <span>Bio</span>
+          <strong><%= user.bio %></strong>
+        </div>
+
+        <div class="profile-info-item">
+          <span>Member Since</span>
+          <strong><%= new Date(user.createdAt).toDateString() %></strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-panel">
+      <div class="profile-panel-header">
+        <h2>Quick Access</h2>
+      </div>
+
+      <div class="profile-quick-links">
+        <a href="/bookings/my" class="profile-quick-link">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>My Bookings</span>
+        </a>
+
+        <a href="/listings/wishlist" class="profile-quick-link">
+          <i class="fa-regular fa-heart"></i>
+          <span>Wishlist</span>
+        </a>
+
+        <a href="/listings/host/dashboard" class="profile-quick-link">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Host Dashboard</span>
+        </a>
+
+        <a href="/listings/new" class="profile-quick-link">
+          <i class="fa-solid fa-plus"></i>
+          <span>Add Listing</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

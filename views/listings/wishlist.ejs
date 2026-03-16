@@ -1,0 +1,80 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="wishlist-page">
+  <div class="wishlist-hero">
+    <div class="wishlist-hero-content">
+      <h1>My Wishlist</h1>
+      <p>All your saved stays in one beautiful place.</p>
+    </div>
+    <a href="/listings" class="btn wishlist-explore-btn">
+      <i class="fa-solid fa-compass me-2"></i>Explore More
+    </a>
+  </div>
+
+  <% if(listings.length === 0){ %>
+    <div class="empty-wishlist">
+      <div class="empty-icon">
+        <i class="fa-regular fa-heart"></i>
+      </div>
+      <h3>Your wishlist is empty</h3>
+      <p>Save the stays you love and they’ll appear here.</p>
+      <a href="/listings" class="btn btn-dark">Browse Listings</a>
+    </div>
+  <% } else { %>
+
+    <div class="wishlist-stats">
+      <div class="wishlist-stat-card">
+        <span class="stat-number"><%= listings.length %></span>
+        <span class="stat-label">Saved Stays</span>
+      </div>
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-2">
+      <% for(let listing of listings){ %>
+        <div class="col">
+          <div class="card listing-card h-100">
+
+            <div class="listing-img-wrapper">
+              <a href="/listings/<%= listing._id %>" class="listing-link-anchor">
+                <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="Listing image">
+                <div class="listing-overlay"></div>
+              </a>
+
+              <div class="listing-badge rating-badge">
+                <i class="fa-solid fa-heart"></i> Saved
+              </div>
+
+              <form method="POST" action="/listings/<%= listing._id %>/wishlist" class="wishlist-form">
+                <input type="hidden" name="redirectUrl" value="/listings/wishlist">
+                <button type="submit" class="wishlist-float wishlisted">
+                  <i class="fa-solid fa-heart"></i>
+                </button>
+              </form>
+            </div>
+
+            <div class="card-body">
+              <a href="/listings/<%= listing._id %>" class="listing-link-anchor">
+                <h5 class="listing-title"><%= listing.title %></h5>
+                <p class="listing-location"><%= listing.location %>, <%= listing.country %></p>
+                <p class="listing-price">₹ <%= listing.price.toLocaleString("en-IN") %> / night</p>
+              </a>
+
+              <div class="wishlist-card-actions">
+                <a href="/listings/<%= listing._id %>" class="btn btn-sm btn-dark">View Details</a>
+
+                <form method="POST" action="/listings/<%= listing._id %>/wishlist">
+                  <input type="hidden" name="redirectUrl" value="/listings/wishlist">
+                  <button type="submit" class="btn btn-sm wishlist-remove-btn">
+                    Remove
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+  <% } %>
+</div>

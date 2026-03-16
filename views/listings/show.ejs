@@ -1,0 +1,408 @@
+<% layout("/layouts/boilerplate") %>
+
+  <% let avgRating=0; let totalReviews=0; if (listing.reviews && listing.reviews.length> 0) {
+    totalReviews = listing.reviews.length;
+    let totalRating = listing.reviews.reduce((sum, review) => sum + review.rating, 0);
+    avgRating = (totalRating / totalReviews).toFixed(1);
+    }
+    %>
+
+    <div class="show-page">
+
+      <!-- HEADER -->
+      <div class="show-header mb-4">
+
+        <h1 class="show-title">
+          <%= listing.title %>
+        </h1>
+
+        <form method="POST" action="/listings/<%= listing._id %>/wishlist">
+          <button class="wishlist-btn">
+            <i class="fa-regular fa-heart"></i> Save to Wishlist
+          </button>
+        </form>
+
+        <p class="show-subtitle">
+          <i class="fa-solid fa-location-dot"></i>
+          <%= listing.location %>, <%= listing.country %>
+        </p>
+
+        <% if(totalReviews> 0){ %>
+
+          <div class="rating-summary-strip">
+
+            <div class="rating-pill">
+              <i class="fa-solid fa-star"></i>
+              <span>
+                <%= avgRating %> / 5
+              </span>
+            </div>
+
+            <div class="rating-pill muted-pill">
+              <i class="fa-regular fa-comment-dots"></i>
+              <span>
+                <%= totalReviews %> reviews
+              </span>
+            </div>
+
+          </div>
+
+          <% } else { %>
+
+            <div class="rating-summary-strip">
+              <div class="rating-pill muted-pill">
+                <i class="fa-regular fa-star"></i>
+                <span>No reviews yet</span>
+              </div>
+            </div>
+
+            <% } %>
+
+              <!-- SHARE BUTTONS -->
+
+              <div class="share-actions">
+
+                <button type="button" class="share-btn" onclick="copyListingLink()">
+                  <i class="fa-solid fa-link me-2"></i>Copy Link
+                </button>
+
+                <a class="share-btn" target="_blank"
+                  href="https://wa.me/?text=<%= encodeURIComponent(listing.title + ' - ' + listing.location + ', ' + listing.country + ' ' + ('http://localhost:8080/listings/' + listing._id)) %>">
+                  <i class="fa-brands fa-whatsapp me-2"></i>WhatsApp
+                </a>
+
+                <button type="button" class="share-btn" onclick="shareListing()">
+                  <i class="fa-solid fa-share-nodes me-2"></i>Share
+                </button>
+
+              </div>
+
+      </div>
+
+      <!-- IMAGE -->
+
+      <div class="show-image-wrapper mb-4">
+        <img src="<%= listing.image.url %>" class="show-main-img" alt="Listing image">
+      </div>
+
+      <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-8">
+
+          <div class="show-info-card">
+
+            <p class="owner-line">
+              Hosted by <b>
+                <%= listing.owner.username %>
+              </b>
+            </p>
+
+            <p class="show-description">
+              <%= listing.description %>
+            </p>
+
+            <div class="show-price-box">
+              <span class="price-label">Price</span>
+              <h3>₹ <%= listing.price.toLocaleString("en-IN") %> <span>/ night</span></h3>
+            </div>
+
+            <% if(listing.amenities && listing.amenities.length> 0){ %>
+
+              <div class="amenities-section mt-4">
+
+                <h4 class="amenities-title">Amenities</h4>
+
+                <div class="amenities-show-grid">
+
+                  <% listing.amenities.forEach((item)=> { %>
+
+                    <div class="amenity-badge">
+                      <span>
+                        <%= item %>
+                      </span>
+                    </div>
+
+                    <% }) %>
+
+                </div>
+
+              </div>
+
+              <% } %>
+
+          </div>
+
+          <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+
+            <div class="show-action-btns mt-3">
+
+              <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">Edit</a>
+
+              <form method="POST" action="/listings/<%= listing.id %>?_method=DELETE">
+                <button class="btn btn-danger">Delete</button>
+              </form>
+
+            </div>
+
+            <% } %>
+
+              <!-- REVIEW FORM -->
+
+              <% if(currUser) { %>
+
+                <div class="review-form-card mt-4">
+
+                  <h4 class="mb-3">Leave a Review</h4>
+
+                  <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+
+                    <div class="mb-3">
+
+                      <label for="rating" class="form-label">Rating</label>
+
+                      <fieldset class="starability-slot">
+
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked>
+
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1">
+                        <label for="first-rate1">1 star</label>
+
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2">
+                        <label for="first-rate2">2 stars</label>
+
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3">
+                        <label for="first-rate3">3 stars</label>
+
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4">
+                        <label for="first-rate4">4 stars</label>
+
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5">
+                        <label for="first-rate5">5 stars</label>
+
+                      </fieldset>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                      <label for="comment" class="form-label">Comments</label>
+
+                      <textarea name="review[comment]" id="comment" rows="5" class="form-control" required></textarea>
+
+                      <div class="invalid-feedback">
+                        Please add some comments
+                      </div>
+
+                    </div>
+
+                    <button class="btn btn-outline-dark">Submit Review</button>
+
+                  </form>
+
+                </div>
+
+                <% } %>
+
+        </div>
+
+        <!-- BOOKING CARD -->
+
+        <div class="col-lg-4">
+
+          <div class="booking-card premium-booking-card">
+
+            <h4>Reserve this stay</h4>
+
+            <div class="booking-price-line">
+
+              <span class="booking-main-price">
+                ₹ <%= listing.price.toLocaleString("en-IN") %>
+              </span>
+
+              <span class="booking-per-night">
+                / night
+              </span>
+
+            </div>
+
+            <% if(currUser){ %>
+
+              <form method="POST" action="/listings/<%= listing._id %>/book">
+
+                <div class="mb-3">
+
+                  <label>Check In</label>
+
+                  <input type="date" id="checkIn" name="checkIn" class="form-control" required>
+
+                </div>
+
+                <div class="mb-3">
+
+                  <label>Check Out</label>
+
+                  <input type="date" id="checkOut" name="checkOut" class="form-control" required>
+
+                </div>
+
+                <div class="mb-3">
+
+                  <label>Guests</label>
+
+                  <input type="number" name="guests" class="form-control" value="1" min="1">
+
+                </div>
+
+                <div class="booking-total-box">
+
+                  <div class="booking-total-row">
+                    <span>Nights</span>
+                    <strong id="totalNights">0</strong>
+                  </div>
+
+                  <div class="booking-total-row">
+                    <span>Total</span>
+                    <strong id="totalPrice">₹0</strong>
+                  </div>
+
+                </div>
+
+                <button class="btn reserve-btn w-100 mt-3">
+                  Reserve Now
+                </button>
+
+              </form>
+
+              <% } else { %>
+
+                <a href="/login" class="btn reserve-btn w-100 mt-3">
+                  Login to Reserve
+                </a>
+
+                <% } %>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- REVIEWS -->
+
+      <% if(listing.reviews.length> 0){ %>
+
+        <div class="reviews-section mt-5">
+
+          <h3>Guest Reviews</h3>
+
+          <div class="row">
+
+            <% for(review of listing.reviews){ %>
+
+              <div class="col-md-6 mb-4">
+
+                <div class="review-card">
+
+                  <h5>@<%= review.author.username %>
+                  </h5>
+
+                  <p class="starability-result" data-rating="<%= review.rating %>"></p>
+
+                  <p>
+                    <%= review.comment %>
+                  </p>
+
+                  <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+
+                    <button class="btn btn-sm btn-dark">
+                      Delete
+                    </button>
+
+                  </form>
+
+                </div>
+
+              </div>
+
+              <% } %>
+
+          </div>
+
+        </div>
+
+        <% } %>
+
+          <!-- MAP -->
+
+          <div class="map-section mt-5">
+
+            <h3>Where you'll be</h3>
+
+            <div id="map"></div>
+
+          </div>
+
+    </div>
+
+    <script>
+  function copyListingLink() {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => alert("Link copied!"))
+      .catch(() => alert("Could not copy"));
+  }
+
+  function shareListing() {
+    const shareData = {
+      title: "<%= listing.title %>",
+      text: "Check out this property!",
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData);
+    } else {
+      alert("Share not supported");
+    }
+  }
+</script>
+
+<script>
+  const mapToken = "<%= mapToken %>";
+  const listingData = <%- JSON.stringify(listing) %>;
+</script>
+
+<script src="/js/map.js"></script>
+
+<script>
+  const pricePerNight = <%= listing.price %>;
+
+  const checkInInput = document.getElementById("checkIn");
+  const checkOutInput = document.getElementById("checkOut");
+
+  const totalNightsEl = document.getElementById("totalNights");
+  const totalPriceEl = document.getElementById("totalPrice");
+
+  function calculateTotal() {
+    const checkIn = new Date(checkInInput.value);
+    const checkOut = new Date(checkOutInput.value);
+
+    if (checkInInput && checkOutInput && checkInInput.value && checkOutInput.value && checkOut > checkIn) {
+      const diff = checkOut - checkIn;
+      const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      const total = nights * pricePerNight;
+
+      totalNightsEl.textContent = nights;
+      totalPriceEl.textContent = "₹ " + total;
+    } else {
+      totalNightsEl.textContent = "0";
+      totalPriceEl.textContent = "₹0";
+    }
+  }
+
+  if (checkInInput && checkOutInput) {
+    checkInInput.addEventListener("change", calculateTotal);
+    checkOutInput.addEventListener("change", calculateTotal);
+  }
+</script>

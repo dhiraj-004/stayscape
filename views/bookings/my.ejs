@@ -1,0 +1,227 @@
+<% layout("/layouts/boilerplate") %>
+
+<%
+  const now = new Date();
+
+  const upcomingBookings = bookings.filter(
+    (b) => b.status === "Confirmed" && new Date(b.checkOut) >= now
+  );
+
+  const completedBookings = bookings.filter(
+    (b) => b.status === "Confirmed" && new Date(b.checkOut) < now
+  );
+
+  const cancelledBookings = bookings.filter(
+    (b) => b.status === "Cancelled"
+  );
+
+  const totalSpent = bookings.reduce((sum, b) => {
+    return sum + (b.status === "Confirmed" ? b.totalPrice : 0);
+  }, 0);
+%>
+
+<div class="dashboard-page">
+  <div class="dashboard-hero bookings-hero">
+    <div>
+      <h1>My Bookings</h1>
+      <p>Track your trips, manage reservations, and review your travel history.</p>
+    </div>
+    <a href="/listings" class="btn dashboard-hero-btn">
+      <i class="fa-solid fa-compass me-2"></i>Explore More
+    </a>
+  </div>
+
+  <div class="dashboard-stats">
+    <div class="dash-stat-card animated-stat">
+      <span class="dash-stat-number"><%= bookings.length %></span>
+      <span class="dash-stat-label">Total Bookings</span>
+    </div>
+
+    <div class="dash-stat-card animated-stat">
+      <span class="dash-stat-number"><%= upcomingBookings.length %></span>
+      <span class="dash-stat-label">Upcoming</span>
+    </div>
+
+    <div class="dash-stat-card animated-stat revenue-card">
+      <span class="dash-stat-number">₹ <%= totalSpent.toLocaleString("en-IN") %></span>
+      <span class="dash-stat-label">Total Spent</span>
+    </div>
+  </div>
+
+  <% if(bookings.length === 0){ %>
+    <div class="empty-dashboard-card">
+      <i class="fa-regular fa-calendar-xmark empty-dash-icon"></i>
+      <h3>No bookings yet</h3>
+      <p>Your reserved stays will appear here.</p>
+      <a href="/listings" class="btn btn-dark">Explore Listings</a>
+    </div>
+  <% } else { %>
+
+    <!-- UPCOMING -->
+    <div class="booking-section-block">
+      <div class="booking-section-header">
+        <h3>Upcoming Bookings</h3>
+        <span class="booking-section-count"><%= upcomingBookings.length %></span>
+      </div>
+
+      <% if(upcomingBookings.length === 0){ %>
+        <div class="empty-mini-state">No upcoming bookings.</div>
+      <% } else { %>
+        <div class="row g-4 mt-1">
+          <% upcomingBookings.forEach((booking) => { %>
+            <div class="col-lg-6">
+              <div class="dashboard-card booking-dashboard-card">
+                <div class="dashboard-card-img-wrap">
+                  <img src="<%= booking.listing.image.url %>" alt="Listing image" class="dashboard-card-img">
+                </div>
+
+                <div class="dashboard-card-content">
+                  <div class="booking-status status-confirmed">Upcoming</div>
+
+                  <h4><%= booking.listing.title %></h4>
+                  <p class="dash-muted"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+
+                  <div class="dashboard-meta-grid">
+                    <div>
+                      <span>Check In</span>
+                      <strong><%= new Date(booking.checkIn).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Check Out</span>
+                      <strong><%= new Date(booking.checkOut).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Guests</span>
+                      <strong><%= booking.guests %></strong>
+                    </div>
+                    <div>
+                      <span>Total</span>
+                      <strong>₹ <%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+                    </div>
+                  </div>
+
+                  <div class="dashboard-actions">
+                    <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark btn-sm">View Stay</a>
+
+                    <form method="POST" action="/bookings/<%= booking._id %>/cancel">
+                      <button class="btn btn-sm cancel-booking-btn">Cancel Booking</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="booking-section-block">
+      <div class="booking-section-header">
+        <h3>Completed Bookings</h3>
+        <span class="booking-section-count"><%= completedBookings.length %></span>
+      </div>
+
+      <% if(completedBookings.length === 0){ %>
+        <div class="empty-mini-state">No completed bookings yet.</div>
+      <% } else { %>
+        <div class="row g-4 mt-1">
+          <% completedBookings.forEach((booking) => { %>
+            <div class="col-lg-6">
+              <div class="dashboard-card booking-dashboard-card">
+                <div class="dashboard-card-img-wrap">
+                  <img src="<%= booking.listing.image.url %>" alt="Listing image" class="dashboard-card-img">
+                </div>
+
+                <div class="dashboard-card-content">
+                  <div class="booking-status completed-status">Completed</div>
+
+                  <h4><%= booking.listing.title %></h4>
+                  <p class="dash-muted"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+
+                  <div class="dashboard-meta-grid">
+                    <div>
+                      <span>Check In</span>
+                      <strong><%= new Date(booking.checkIn).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Check Out</span>
+                      <strong><%= new Date(booking.checkOut).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Guests</span>
+                      <strong><%= booking.guests %></strong>
+                    </div>
+                    <div>
+                      <span>Total</span>
+                      <strong>₹ <%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+                    </div>
+                  </div>
+
+                  <div class="dashboard-actions">
+                    <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark btn-sm">View Stay</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- CANCELLED -->
+    <div class="booking-section-block">
+      <div class="booking-section-header">
+        <h3>Cancelled Bookings</h3>
+        <span class="booking-section-count"><%= cancelledBookings.length %></span>
+      </div>
+
+      <% if(cancelledBookings.length === 0){ %>
+        <div class="empty-mini-state">No cancelled bookings.</div>
+      <% } else { %>
+        <div class="row g-4 mt-1">
+          <% cancelledBookings.forEach((booking) => { %>
+            <div class="col-lg-6">
+              <div class="dashboard-card booking-dashboard-card">
+                <div class="dashboard-card-img-wrap">
+                  <img src="<%= booking.listing.image.url %>" alt="Listing image" class="dashboard-card-img">
+                </div>
+
+                <div class="dashboard-card-content">
+                  <div class="booking-status status-cancelled">Cancelled</div>
+
+                  <h4><%= booking.listing.title %></h4>
+                  <p class="dash-muted"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+
+                  <div class="dashboard-meta-grid">
+                    <div>
+                      <span>Check In</span>
+                      <strong><%= new Date(booking.checkIn).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Check Out</span>
+                      <strong><%= new Date(booking.checkOut).toDateString() %></strong>
+                    </div>
+                    <div>
+                      <span>Guests</span>
+                      <strong><%= booking.guests %></strong>
+                    </div>
+                    <div>
+                      <span>Total</span>
+                      <strong>₹ <%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+                    </div>
+                  </div>
+
+                  <div class="dashboard-actions">
+                    <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark btn-sm">View Stay</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+  <% } %>
+</div>

@@ -1,0 +1,79 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-wrapper">
+  <div class="auth-shape s1"></div>
+  <div class="auth-shape s2"></div>
+  <div class="auth-shape s3"></div>
+
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <div class="auth-badge">
+        <i class="fa-solid fa-sparkles"></i>
+        <span>Create Your Travel Identity</span>
+      </div>
+
+      <h1>Join the StayScape experience</h1>
+      <p>
+        Create your account to book stays, save favorites, leave reviews, and manage your hosting journey.
+      </p>
+
+      <div class="auth-visual-grid">
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-house-circle-check"></i>
+          <h5>Explore Stays</h5>
+          <p>Discover curated properties across locations and categories.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-wallet"></i>
+          <h5>Reserve Easily</h5>
+          <p>Simple booking flow with clear pricing and instant actions.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-star"></i>
+          <h5>Review & Rate</h5>
+          <p>Share your experience and help future travelers choose better.</p>
+        </div>
+
+        <div class="auth-feature-card">
+          <i class="fa-solid fa-user-lock"></i>
+          <h5>Secure Profile</h5>
+          <p>Your account stays protected with structured authentication flow.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <p class="auth-subtext">Start your premium travel and hosting journey today.</p>
+
+        <form action="/signup" method="POST">
+          <div class="auth-form-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" placeholder="Choose a username" required>
+          </div>
+
+          <div class="auth-form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="Enter your email" required>
+          </div>
+
+          <div class="auth-form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" placeholder="Create a password" required>
+          </div>
+
+          <button class="auth-btn" type="submit">
+            <i class="fa-solid fa-user-plus me-2"></i>Create Account
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Already have an account? <a href="/login">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

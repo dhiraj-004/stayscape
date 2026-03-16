@@ -1,0 +1,126 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <h1>Add a New Stay</h1>
+      <p>Share your property with travelers and make it discoverable on StayScape.</p>
+    </div>
+
+    <form method="POST" action="/listings" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="row g-3">
+
+        <div class="col-md-12">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="listing[title]"
+            placeholder="Luxury Sea View Apartment"
+            required
+          >
+          <div class="invalid-feedback">Please enter a title.</div>
+        </div>
+
+        <div class="col-md-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            name="listing[description]"
+            rows="5"
+            placeholder="Describe your property, amenities, and what makes it special..."
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please enter a description.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="image" class="form-label">Upload Image</label>
+          <input
+            type="file"
+            class="form-control"
+            id="image"
+            name="listing[image]"
+            required
+          >
+          <div class="invalid-feedback">Please upload an image.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="price" class="form-label">Price per Night</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            name="listing[price]"
+            placeholder="2500"
+            required
+          >
+          <div class="invalid-feedback">Please enter the price.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="location" class="form-label">Location</label>
+          <input
+            type="text"
+            class="form-control"
+            id="location"
+            name="listing[location]"
+            placeholder="Mumbai"
+            required
+          >
+          <div class="invalid-feedback">Please enter the location.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            class="form-control"
+            id="country"
+            name="listing[country]"
+            placeholder="India"
+            required
+          >
+          <div class="invalid-feedback">Please enter the country.</div>
+        </div>
+
+        <div class="col-md-12">
+          <label for="category" class="form-label">Category</label>
+          <select class="form-select" id="category" name="listing[category]" required>
+            <option value="">Select category</option>
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Cities">Cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Beach">Beach</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+          </select>
+          <div class="invalid-feedback">Please select a category.</div>
+        </div>
+
+      </div>
+      <div class="col-md-12">
+  <label class="form-label">Amenities</label>
+
+  <div class="amenities-grid">
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Wifi"> Wifi</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Parking"> Parking</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="AC"> AC</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Kitchen"> Kitchen</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Pool"> Pool</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="TV"> TV</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Pet Friendly"> Pet Friendly</label>
+    <label class="amenity-option"><input type="checkbox" name="listing[amenities][]" value="Breakfast"> Breakfast</label>
+  </div>
+</div>
+
+      <div class="form-actions mt-4">
+        <button class="btn btn-dark add-btn">Create Listing</button>
+      </div>
+    </form>
+  </div>
+</div>
