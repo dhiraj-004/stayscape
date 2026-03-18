@@ -17,7 +17,7 @@ Before you begin, make sure you have the following installed on your system:
 
 1. Clone the StayScape repository from GitHub:
 
-        git clone https://github.com/uttakarsh-baranwal/StayScape.git
+        git clone https://github.com/dhiraj-004/stayscape.git
 
 2. Set up the database:
 
